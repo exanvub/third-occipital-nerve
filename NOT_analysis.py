@@ -20,6 +20,7 @@ L_IVF = df.loc[df['label'] == 'L_IVF', ['x1', 'y1', 'z1']].values
 L_dors_ramus_mid = df.loc[df['label'] == 'L_dors_ramus_mid', ['x1', 'y1', 'z1']].values
 L_Split = df.loc[df['label'] == 'L_Split', ['x1', 'y1', 'z1']].values
 L_half_NOT = df.loc[df['label'] == 'L_half_NOT', ['x1', 'y1', 'z1']].values
+L_bocht_NOT = df.loc[df['label'] == 'L_bocht_NOT', ['x1', 'y1', 'z1']].values
 L_Facet_MED = df.loc[df['label'] == 'L_Facet_MED', ['x1', 'y1', 'z1']].values
 L_Facet_Mid = df.loc[df['label'] == 'L_Facet_Mid', ['x1', 'y1', 'z1']].values
 L_Facet_POST = df.loc[df['label'] == 'L_Facet_POST', ['x1', 'y1', 'z1']].values
@@ -40,6 +41,7 @@ coordinates_L_NOT = {
     "A_2": L_dors_ramus_mid[0],
     "A_3": L_Split[0],
     "A_4": L_half_NOT[0],
+    "A_5": L_bocht_NOT[0],
 }
 
 coordinates_L_Facet = {
@@ -635,3 +637,48 @@ plt.show()
 
 # Show the plot with the updated legend
 # plt.show()
+
+## Plot for paper image
+
+# Create Left plot
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# Plot the points for set A
+# ax.scatter(x_A, y_A, z_A, c='r', marker='o')
+
+# Plot the points for set B
+# ax.scatter(x_B, y_B, z_B, c='m', marker='s')
+
+ax.scatter(L_Kruising[0][0], L_Kruising[0][1], L_Kruising[0][2], c='k', marker='x', s=60, label='Crossing Point')
+ax.scatter(L_IVF[0][0], L_IVF[0][1], L_IVF[0][2], c='k', marker='d', s=40, label='IVF')
+ax.scatter(L_Facet_MED[0][0], L_Facet_MED[0][1], L_Facet_MED[0][2], c='m', marker='s', label='L: Facet Lateral')
+ax.scatter(L_Facet_POST[0][0], L_Facet_POST[0][1], L_Facet_POST[0][2], c='m', marker='s', label='P: Facet Posterior')
+
+# Plot the smooth curves
+ax.plot(x_new_A, y_new_A, z_new_A, c='r', label='Nerve (TON)', linewidth=2)
+ax.plot(x_new_B, y_new_B, z_new_B, c='m', label='Facet (C2-C3)', linewidth=2)
+
+# Plot tangent vectors at the closest points to 'L_Kruising'
+if L_Kruising_coords is not None and not np.isnan(L_Kruising_coords).any():
+    ax.quiver(*closest_point_A_to_L_Kruising, *tangent_vector_A_to_L_Kruising, color='b', label="Nerve Tangent vector at crossing", pivot='tail', linewidth=1, length=40, arrow_length_ratio=0.1)
+    ax.quiver(*closest_point_B_to_L_Kruising, *tangent_vector_B_to_L_Kruising, color='g', label="Facet Tangent vector at crossing", pivot='tail', linewidth=1, length=20, arrow_length_ratio=0.1)
+   # ax.scatter(closest_point_A_to_L_Kruising[0], closest_point_A_to_L_Kruising[1], closest_point_A_to_L_Kruising[2], c='k', marker='x', s=50, label="Closest Point on A to 'L_Kruising'")
+   # ax.scatter(closest_point_B_to_L_Kruising[0], closest_point_B_to_L_Kruising[1], closest_point_B_to_L_Kruising[2], c='k', marker='x', s=50, label="Closest Point on B to 'L_Kruising'")
+
+ax.scatter(Tubpost_C1[0][0], Tubpost_C1[0][1], Tubpost_C1[0][2], c='b', marker='d', s=35, label='Post Tub - C1')
+ax.scatter(PS_C2[0][0], PS_C2[0][1], PS_C2[0][2], c='b', marker='o', label='PS - C2')
+ax.scatter(PS_C3[0][0], PS_C3[0][1], PS_C3[0][2], c='b', marker='o', label='PS - C3')
+ax.scatter(PS_C4[0][0], PS_C4[0][1], PS_C4[0][2], c='b', marker='o', label='PS - C4')
+
+# Set labels for the axes
+ax.set_xlabel('X-axis')
+ax.set_ylabel('Y-axis')
+ax.set_zlabel('Z-axis')
+
+ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+# # Add a custom legend for the plane
+# custom_legend = ax.legend(['L Facet Plane'], loc='center left', bbox_to_anchor=(1, 0.5))
+
+# Show the plot with the updated legend
+plt.show()

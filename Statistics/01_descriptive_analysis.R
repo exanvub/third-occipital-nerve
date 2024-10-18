@@ -99,6 +99,14 @@ data.ton %>%
   bold_labels() %>%
   add_p()
 
+# Hypothesis: more angle = more chance of a notch? ----------------------
+
+data.ton %>%
+  select(ton_cross_angle, ton_notch, ton_notch2) %>%
+  tbl_summary(by = ton_cross_angle) %>% 
+  add_overall() %>%
+  bold_labels() %>%
+  add_p()
 
 # -------------------------------------------------------------------------
 # Hypothesis: more tissue = smaller chance of a notch ---------------------
